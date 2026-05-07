@@ -1,12 +1,10 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import type { AuthUser } from 'aws-amplify/auth';
 import {
   HomeIcon,
   Squares2X2Icon,
   Bars3Icon,
   ChevronLeftIcon,
-  ArrowRightStartOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
 /* ------------------------------------------------------------------ */
@@ -27,15 +25,13 @@ const navItems: NavItem[] = [
 /*  Props                                                              */
 /* ------------------------------------------------------------------ */
 type Props = {
-  user?: AuthUser;
-  onSignOut?: () => void;
   children: ReactNode;
 };
 
 /* ------------------------------------------------------------------ */
 /*  AppLayout                                                          */
 /* ------------------------------------------------------------------ */
-export function AppLayout({ user, onSignOut, children }: Props) {
+export function AppLayout({ children }: Props) {
   const { pathname } = useLocation();
   const [expanded, setExpanded] = useState(false);
 
@@ -95,23 +91,8 @@ export function AppLayout({ user, onSignOut, children }: Props) {
           })}
         </nav>
 
-        {/* ログアウト (サイドバー下部) */}
-        <div className="border-t border-slate-200 px-2 py-3">
-          {expanded && (
-            <p className="mb-2 truncate px-2 text-xs text-slate-500">
-              {user?.signInDetails?.loginId ?? ''}
-            </p>
-          )}
-          <button
-            type="button"
-            onClick={onSignOut}
-            title="ログアウト"
-            className="flex w-full items-center gap-3 rounded-lg px-2 py-2 hover:bg-slate-100"
-          >
-            <ArrowRightStartOnRectangleIcon className="h-6 w-6 flex-shrink-0" />
-            {expanded && <span className="text-sm">ログアウト</span>}
-          </button>
-        </div>
+        {/* サイドバー下部スペーサー */}
+        <div className="border-t border-slate-200 px-2 py-3" />
       </aside>
 
       {/* ---------- メインエリア ---------- */}
@@ -119,9 +100,7 @@ export function AppLayout({ user, onSignOut, children }: Props) {
         {/* ヘッダー */}
         <header className="flex h-14 items-center justify-between border-b border-slate-200 bg-white px-6">
           <h1 className="text-lg font-bold text-slate-800">Tablet PWA Template</h1>
-          <span className="text-sm text-slate-500">
-            {user?.signInDetails?.loginId ?? ''}
-          </span>
+          <span className="text-sm text-slate-500" />
         </header>
 
         {/* コンテンツ */}
