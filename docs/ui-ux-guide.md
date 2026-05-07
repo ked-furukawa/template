@@ -100,7 +100,7 @@
 
 - 背景色: `bg-stone-50` + `border-r border-stone-200/70`（右端に極細ボーダーで境界を明示）
 - テキスト: `text-stone-700`
-- アクティブ項目: `bg-stone-800 font-semibold text-stone-50`（彩度を抑えた反転で現在地を明示）
+- アクティブ項目: `bg-stone-700 font-semibold text-stone-50`（温かみのある濃ウォームグレーで現在地を明示。純黒寄りの `stone-800` 以上は使わない）
 - ホバー: `bg-stone-100`
 - 下部区切り線: `border-t border-stone-200/70`
 - 開閉アニメーション: `transition-[width] duration-200`

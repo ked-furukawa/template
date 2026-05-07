@@ -78,7 +78,7 @@ export function AppLayout({ children }: Props) {
                 title={item.label}
                 className={`flex items-center gap-3 rounded-lg px-2 py-3 transition-colors ${
                   active
-                    ? 'bg-stone-800 font-semibold text-stone-50'
+                    ? 'bg-stone-700 font-semibold text-stone-50'
                     : 'text-stone-700 hover:bg-stone-100'
                 }`}
               >
