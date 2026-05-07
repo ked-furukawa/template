@@ -36,24 +36,24 @@ export function AppLayout({ children }: Props) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-stone-100">
       {/* ---------- サイドバー ---------- */}
       <aside
-        className={`flex flex-col border-r border-slate-200 bg-white text-slate-700 transition-[width] duration-200 ${
+        className={`flex flex-col border-r border-stone-200/70 bg-stone-50 text-stone-700 transition-[width] duration-200 ${
           expanded ? 'w-56' : 'w-16'
         }`}
       >
-        {/* ヘッダー（トグルボタン） */}
+        {/* ヘッダー(トグルボタン) */}
         <div className="flex h-14 items-center">
           {expanded && (
-            <div className="flex flex-1 items-center px-4 text-sm font-bold text-slate-800">
+            <div className="flex flex-1 items-center px-4 text-sm font-bold text-stone-800">
               Tablet PWA
             </div>
           )}
           <button
             type="button"
             onClick={() => setExpanded((prev) => !prev)}
-            className={`flex h-14 items-center justify-center hover:bg-slate-100 ${
+            className={`flex h-14 items-center justify-center text-stone-600 hover:bg-stone-100 ${
               expanded ? 'w-14' : 'w-full'
             }`}
             aria-label={expanded ? 'メニューを閉じる' : 'メニューを開く'}
@@ -78,8 +78,8 @@ export function AppLayout({ children }: Props) {
                 title={item.label}
                 className={`flex items-center gap-3 rounded-lg px-2 py-3 transition-colors ${
                   active
-                    ? 'bg-slate-900 font-semibold text-white'
-                    : 'hover:bg-slate-100'
+                    ? 'bg-stone-800 font-semibold text-stone-50'
+                    : 'text-stone-700 hover:bg-stone-100'
                 }`}
               >
                 <Icon className="h-6 w-6 flex-shrink-0" />
@@ -92,19 +92,19 @@ export function AppLayout({ children }: Props) {
         </nav>
 
         {/* サイドバー下部スペーサー */}
-        <div className="border-t border-slate-200 px-2 py-3" />
+        <div className="border-t border-stone-200/70 px-2 py-3" />
       </aside>
 
       {/* ---------- メインエリア ---------- */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* ヘッダー */}
-        <header className="flex h-14 items-center justify-between border-b border-slate-200 bg-white px-6">
-          <h1 className="text-lg font-bold text-slate-800">Tablet PWA Template</h1>
-          <span className="text-sm text-slate-500" />
+        <header className="flex h-14 items-center justify-between border-b border-stone-200/70 bg-stone-50 px-6">
+          <h1 className="text-lg font-semibold text-stone-800">Tablet PWA Template</h1>
+          <span className="text-sm text-stone-500" />
         </header>
 
         {/* コンテンツ */}
-        <main className="flex-1 overflow-y-auto px-6 py-8">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-stone-100 px-6 py-8">{children}</main>
       </div>
     </div>
   );

@@ -56,7 +56,7 @@ export function NumberField({
 
   return (
     <div className={className}>
-      <label className="text-sm font-semibold text-slate-700">{label}</label>
+      <label className="text-sm font-semibold text-stone-700">{label}</label>
       <BaseNumberField.Root
         value={value}
         onValueChange={(v) => onValueChange(v ?? null)}
@@ -68,10 +68,10 @@ export function NumberField({
         disabled={disabled}
         required={required}
       >
-        <BaseNumberField.Group className="mt-1 inline-flex items-stretch overflow-hidden rounded-lg border border-slate-300 bg-white">
+        <BaseNumberField.Group className="mt-1 inline-flex items-stretch overflow-hidden rounded-lg border border-stone-300 bg-stone-50 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-200">
           <BaseNumberField.Decrement
             aria-label={`${label}を減らす`}
-            className="flex h-12 w-12 items-center justify-center border-r border-slate-300 text-2xl text-slate-700 hover:bg-slate-100 active:bg-slate-200 disabled:opacity-40"
+            className="flex h-12 w-12 items-center justify-center border-r border-stone-300 text-2xl text-stone-700 hover:bg-stone-100 active:bg-stone-200 disabled:opacity-40"
           >
             −
           </BaseNumberField.Decrement>
@@ -90,12 +90,12 @@ export function NumberField({
                 readOnly
                 tabIndex={-1}
                 placeholder={placeholder}
-                className={`pointer-events-none w-full bg-transparent text-center text-lg tabular-nums text-slate-900 placeholder:text-slate-400 outline-none ${
+                className={`pointer-events-none w-full bg-transparent text-center text-lg tabular-nums text-stone-900 placeholder:text-stone-400 outline-none ${
                   inputClassName ?? ''
                 }`}
               />
               {unit && (
-                <span className="text-sm text-slate-500" aria-hidden="true">
+                <span className="text-sm text-stone-500" aria-hidden="true">
                   {unit}
                 </span>
               )}
@@ -104,14 +104,14 @@ export function NumberField({
 
           <BaseNumberField.Increment
             aria-label={`${label}を増やす`}
-            className="flex h-12 w-12 items-center justify-center border-l border-slate-300 text-2xl text-slate-700 hover:bg-slate-100 active:bg-slate-200 disabled:opacity-40"
+            className="flex h-12 w-12 items-center justify-center border-l border-stone-300 text-2xl text-stone-700 hover:bg-stone-100 active:bg-stone-200 disabled:opacity-40"
           >
             +
           </BaseNumberField.Increment>
         </BaseNumberField.Group>
       </BaseNumberField.Root>
 
-      {warning && <p className="mt-1 text-xs text-amber-700">{warning}</p>}
+      {warning && <p className="mt-1 text-xs text-amber-800">{warning}</p>}
 
       {allowPad && (
         <NumberPad

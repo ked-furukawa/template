@@ -11,10 +11,18 @@ type FormState = {
 
 const EMPTY_FORM: FormState = { name: '', note: '' };
 
+const inputBase =
+  'mt-1 w-full rounded-lg border bg-stone-50 px-3 py-2 text-base text-stone-800 placeholder:text-stone-400 outline-none transition-colors';
+const inputNormal =
+  'border-stone-300 focus:border-blue-400 focus:bg-stone-50 focus:ring-2 focus:ring-blue-200';
+const inputError =
+  'border-red-400 bg-red-50 text-red-900 focus:border-red-500 focus:ring-2 focus:ring-red-200';
+
 export function Items() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -47,20 +55,23 @@ export function Items() {
       name: item.name,
       note: item.note ?? '',
     });
+    setNameError(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function cancelEdit() {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setNameError(null);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setNameError(null);
     const name = form.name.trim();
     if (!name) {
-      setError('名前を入力してください。');
+      setNameError('名前を入力してください。');
       return;
     }
     setSubmitting(true);
@@ -108,35 +119,48 @@ export function Items() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <h1 className="text-2xl font-bold">アイテム</h1>
+      <h1 className="text-2xl font-bold text-stone-900">アイテム</h1>
 
       {error && (
-        <div className="rounded-lg border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+        <div className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
       )}
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-3 text-lg font-semibold">
+      <section
+        className={`rounded-xl border p-6 ${
+          editingId
+            ? 'border-blue-300 bg-blue-50/60'
+            : 'border-stone-200/70 bg-stone-50'
+        }`}
+      >
+        <h2 className="mb-4 text-lg font-semibold text-stone-800">
           {editingId ? 'アイテムを編集' : '新しいアイテムを追加'}
         </h2>
         <form onSubmit={handleSubmit} className="grid gap-4">
           <label className="block">
-            <span className="text-sm font-semibold text-slate-700">名前</span>
+            <span className="text-sm font-semibold text-stone-700">名前</span>
             <input
               type="text"
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-base"
+              className={`${inputBase} ${nameError ? inputError : inputNormal}`}
               value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              onChange={(e) => {
+                setForm({ ...form, name: e.target.value });
+                if (nameError) setNameError(null);
+              }}
               placeholder="アイテム名"
+              aria-invalid={nameError ? true : undefined}
               required
             />
+            {nameError && (
+              <p className="mt-1 text-sm text-red-700">{nameError}</p>
+            )}
           </label>
           <label className="block">
-            <span className="text-sm font-semibold text-slate-700">メモ(任意)</span>
+            <span className="text-sm font-semibold text-stone-700">メモ(任意)</span>
             <input
               type="text"
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-base"
+              className={`${inputBase} ${inputNormal}`}
               value={form.note}
               onChange={(e) => setForm({ ...form, note: e.target.value })}
               placeholder="補足情報"
@@ -146,7 +170,7 @@ export function Items() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 rounded-lg bg-slate-800 px-4 py-3 text-base font-bold text-white shadow hover:bg-slate-900 disabled:opacity-50"
+              className="flex-1 rounded-lg border border-stone-800 bg-stone-800 px-4 py-3 text-base font-bold text-stone-50 transition-colors hover:bg-stone-900 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-stone-100 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {editingId ? '更新' : '追加'}
             </button>
@@ -155,7 +179,7 @@ export function Items() {
                 type="button"
                 onClick={cancelEdit}
                 disabled={submitting}
-                className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                className="rounded-lg border border-stone-300 bg-stone-50 px-4 py-3 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-stone-100 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 キャンセル
               </button>
@@ -164,49 +188,56 @@ export function Items() {
         </form>
       </section>
 
-      <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-200 px-6 py-4">
-          <h2 className="text-lg font-semibold">登録済みアイテム</h2>
+      <section className="overflow-hidden rounded-xl border border-stone-200/70 bg-stone-50">
+        <div className="border-b border-stone-200/70 px-6 py-4">
+          <h2 className="text-lg font-semibold text-stone-800">登録済みアイテム</h2>
         </div>
         {loading ? (
-          <div className="px-6 py-8 text-center text-slate-500">読み込み中…</div>
+          <div className="px-6 py-8 text-center text-stone-500">読み込み中…</div>
         ) : items.length === 0 ? (
-          <div className="px-6 py-8 text-center text-slate-500">
+          <div className="px-6 py-8 text-center text-stone-500">
             アイテムがまだ登録されていません。
           </div>
         ) : (
-          <ul className="divide-y divide-slate-200">
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className="flex flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-base font-semibold">{item.name}</div>
-                  {item.note && (
-                    <div className="mt-1 text-sm text-slate-600">{item.note}</div>
-                  )}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => startEdit(item)}
-                    disabled={submitting}
-                    className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
-                  >
-                    編集
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(item)}
-                    disabled={submitting}
-                    className="rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-800 hover:bg-rose-100 disabled:opacity-50"
-                  >
-                    削除
-                  </button>
-                </div>
-              </li>
-            ))}
+          <ul>
+            {items.map((item) => {
+              const isEditing = item.id === editingId;
+              return (
+                <li
+                  key={item.id}
+                  className={`flex flex-col gap-3 border-b border-stone-200/70 px-6 py-4 last:border-b-0 transition-colors sm:flex-row sm:items-center sm:justify-between ${
+                    isEditing ? 'bg-blue-50/60' : 'hover:bg-stone-100'
+                  }`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-base font-semibold text-stone-800">
+                      {item.name}
+                    </div>
+                    {item.note && (
+                      <div className="mt-1 text-sm text-stone-600">{item.note}</div>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => startEdit(item)}
+                      disabled={submitting}
+                      className="rounded-lg border border-stone-300 bg-stone-50 px-3 py-2 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      編集
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(item)}
+                      disabled={submitting}
+                      className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 transition-colors hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-300 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      削除
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
